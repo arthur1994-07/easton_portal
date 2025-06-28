@@ -1,0 +1,13 @@
+rootProject.name = 'easton-portal'
+
+
+def dependsOn = { projectName, path ->
+    if(file(path + '/build.gradle').exists()) {
+        include ":${projectName}"
+        project(":${projectName}").projectDir = file(path)
+    }
+}
+
+dependsOn('common-base', '../../../java/core/base')
+dependsOn('common-network', '../../../java/core/network')
+dependsOn('common-web', '../../../java/core/web')
