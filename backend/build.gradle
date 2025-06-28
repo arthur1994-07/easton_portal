@@ -4,7 +4,7 @@ plugins {
     id 'java'
 }
 
-group = 'com.common.easton-portal'
+group = 'com.common.easton_portal'
 version = '0.0.1'
 
 def localLibPath = "$projectDir/../lib"
@@ -19,7 +19,7 @@ def withProject = { projectName ->
 }
 
 
-def achieveName = 'easton-portal'
+def achieveName = 'easton_portal'
 
 repositories {
     mavenCentral()

@@ -1,4 +1,4 @@
-rootProject.name = 'easton-portal'
+rootProject.name = 'easton_portal'
 
 
 def dependsOn = { projectName, path ->
