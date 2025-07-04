@@ -22,12 +22,12 @@ public class UserEntity {
 
 //    set up oauth
 
-//    @Column(columnDefinition = "TEXT")
-//    @NotBlank
-//    private String domainUserId;
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "oauth_id")
-//    private OAuthEntity domain;
+    @Column(columnDefinition = "TEXT")
+    @NotBlank
+    private String domainUserId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "oauth_id")
+    private OAuthEntity domain;
 
     @Column(columnDefinition = "TEXT")
     private String username;

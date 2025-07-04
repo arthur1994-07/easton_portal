@@ -2,9 +2,11 @@ package com.common.easton_portal.model;
 
 import com.common.core.base.helper.JsonHelper;
 import com.common.core.web.security.base.ClaimsInterface;
+import com.common.easton_portal.entity.UserEntity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -75,11 +77,30 @@ public class UserModel {
         Arrays.stream(getClaims()).forEach(claimsApply);
     }
 
+    public UserModel(long id, long oauthId, String username, String token, List<GrantedAuthority> rights) {
+        mUserId = id;
+        mIdentity.name = username;
+        mIdentity.oauthId = oauthId;
+        mIdentity.setIdToken(token);
+        mAuthorities.set(rights);
+    }
+
+    public UserModel(UserEntity entity, String idToken, List<GrantedAuthority> rights) {
+        this(entity.getId(), entity.getDomain().getId(), entity.getUsername(), idToken, rights);
+    }
+
     public long getUuid() { return mUserId;}
     public ClaimsInterface[] getClaims() { return new ClaimsInterface[] { mAuthorities, mIdentity };}
     public Collection<GrantedAuthority> getAuthorities() { return mAuthorities.getAuthorities();}
-    public boolean isAnonymous() { return mUserId == K_ANONYMOUS_USER_ID; }
     public String getIdToken() { return mIdentity.getIdToken(); }
 
     public Identity getIdentity() { return mIdentity; }
+
+    public static UserModel getCurrent() {
+        var auth = SecurityContextHolder.getContext().getAuthentication();
+        var principal = auth.getPrincipal();
+        if (!(principal instanceof UserModel)) return null;
+
+        return (UserModel) principal;
+    }
 }
