@@ -4,7 +4,7 @@ import com.common.core.base.helper.StringHelper;
 
 import java.util.Base64;
 
-public interface EncryptionProvider {
+public interface EncryptedProvider {
     byte[] encrypt(byte[] data) throws Exception;
     byte[] decrypt(byte[] data) throws Exception;
 
