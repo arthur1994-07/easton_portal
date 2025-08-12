@@ -79,7 +79,7 @@ public class AuthService {
         var user = updateUserEntity(response, domain);
         if (user == null) return new SecurityTokenInfo();
         var rights = calculateRights(user, !hasDomainAdmin(), mPermissionSystem);
-        return createTokenInfo(new UserModel(user.getId(), user.getDomain().getId(), user.getUsername(), response.id_token, rights), response.id_token, null);
+        return createTokenInfo(new UserModel(user.getId(), user.getDomain().getId(), user.getUsername(), user.getEmail(), response.id_token, rights), response.id_token, null);
     }
 
 

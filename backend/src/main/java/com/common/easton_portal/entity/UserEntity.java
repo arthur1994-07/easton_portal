@@ -43,4 +43,10 @@ public class UserEntity {
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "id"))
     private final Set<RoleEntity> roles = new HashSet<>();
+
+
+    public String getNameRepresent() {
+        if (accountName == null || "".equals(accountName)) return email;
+        return accountName;
+    }
 }

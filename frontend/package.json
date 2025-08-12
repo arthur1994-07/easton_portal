@@ -17,9 +17,15 @@
 		"parse": "^6.1.1",
 		"quasar": "^2.11.5",
 		"swiper": "^11.1.14",
+		"require": "^0.4.4",
+		"require-npm": "^1.4.1",
+		"vite-plugin-commonjs": "^0.10.4",
+		"vite-plugin-require": "^1.2.14",
+		"vite-plugin-require-transform": "^1.0.21",
 		"vue": "^3.2.45",
 		"vue-router": "^4.1.6",
 		"vue3-cookies": "^1.0.6",
+		"vue3-grid-layout": "^1.0.0",
 		"vuex": "^4.1.0"
 	},
 	"devDependencies": {

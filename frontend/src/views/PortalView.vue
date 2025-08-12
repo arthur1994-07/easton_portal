@@ -23,6 +23,21 @@
 				</q-item-section>
 			</q-item>
 			<q-separator dark />
+			<q-list v-if="currentUser != null && !mini" class="q-ma-lg">
+				<q-item-section class="items-center">
+					<q-icon color="white" name="mdi-account" size="xl" />
+				</q-item-section>
+				<div class="q-ma-lg">Current Profile: </div>
+				<q-item class="justify-center"> 
+					Username: 
+					{{ currentUser.username }}
+				</q-item>
+				<q-item class="justify-center"> 
+					Email:
+					{{ currentUser.email }}
+				</q-item>
+			</q-list>
+			<q-separator dark />
 			<q-list>
 				<div v-for="(item, index) in items" :key="index">
 					<div v-if="item.subItems.length != 0 && mini">
@@ -110,6 +125,7 @@ export default defineComponent({
 		const sliderBar = ref(true)
 		const mini = ref(true)
 		const companyLogo = ref(new URL('../assets/logo.png', import.meta.url).href)
+		const currentUser = ref(null)
 
 		onMounted(() => {
 			const path = SessionStorage.retrieveValue(SessionStorage.targetPath)
@@ -121,14 +137,13 @@ export default defineComponent({
 			try {
 				const permissions = await currentUserService.permission()
 				store.dispatch('ui/setPermission', permissions)
-				const current = await currentUserService.current();
-				console.log(current)
-				store.dispatch('system/updateUserProfile', current)
+				currentUser.value = await currentUserService.current();
+				store.dispatch('system/updateUserProfile', currentUser.value)
 
 				items.value = constructRouterTree(route, permissions)
 
 				groupsState.value = constructGroupItemState(items.value)
-				PopupDialog.show(store, PopupDialog.SUCCESS, "Login successful")
+				
 			} catch (err) {
 				PopupDialog.show(store, PopupDialog.FAILURE, err.message)
 			}
@@ -154,6 +169,7 @@ export default defineComponent({
 
 		const changeGroupState = (item) => {
 			groupsState.value[item.key] = !groupsState.value[item.key];
+			console.log(groupsState.value)
 			if (groupsState.value[item.key]) activeKey.value = item.key;
 		}
 
@@ -166,7 +182,7 @@ export default defineComponent({
 				})
 		}
 
-		return { items, mini, sliderBar, activeKey, groupsState, companyLogo,changeGroupState, navigateTo, signOut }
+		return { items, mini, currentUser, sliderBar, activeKey, groupsState, companyLogo,changeGroupState, navigateTo, signOut }
 	}
 })
 

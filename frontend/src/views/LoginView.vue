@@ -8,7 +8,7 @@
 					<q-card class="bg-primary" style="width: 35vw">
 						<q-card-section>
 							<div class="q-ma-md">
-								<q-img :src="companyLogo" class="q-ma-lg justify-center items-center" fit="contain" style="min-height: 100px; width: 300px" />
+								<q-img :src="companyLogo" class="q-ma-lg justify-center items-center" fit="contain" style="min-height: 50px; width: 300px" />
 								<div class="col-1 q-ma-sm text-h6 text-white">Login portal</div>
 							</div>
 						</q-card-section>

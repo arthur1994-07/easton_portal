@@ -1,5 +1,7 @@
 <template>
-	<div>Empty Page</div>
+	<q-card style="height: 100%">
+		<div>News Page</div>
+	</q-card>
 </template>
 
 <script>

@@ -15,13 +15,12 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class UserModel {
-    private static final long K_ANONYMOUS_USER_ID = 0;
-    public static final String K_ANONYMOUS_USERNAME = "Anonymous User";
 
     public static class Identity implements ClaimsInterface {
         @JsonProperty private long oauthId;
         @JsonProperty private String idToken;
         @JsonProperty private String name;
+        @JsonProperty private String email;
 
         public long getOauthId() { return oauthId; }
         public void setOauthId(long id) { oauthId = id; }
@@ -31,6 +30,9 @@ public class UserModel {
 
         public String getName() { return name; }
         public void setName(String name) { this.name = name; }
+
+        public String getEmail() { return email; }
+        public void setEmail(String email) { this.email = email; }
 
 
         @Override public String key() { return "identity"; }
@@ -43,6 +45,7 @@ public class UserModel {
             this.oauthId = data.oauthId;
             this.idToken = data.idToken;
             this.name = data.name;
+            this.email = data.email;
         }
     }
 
@@ -77,16 +80,17 @@ public class UserModel {
         Arrays.stream(getClaims()).forEach(claimsApply);
     }
 
-    public UserModel(long id, long oauthId, String username, String token, List<GrantedAuthority> rights) {
+    public UserModel(long id, long oauthId, String username, String email, String token, List<GrantedAuthority> rights) {
         mUserId = id;
         mIdentity.name = username;
+        mIdentity.email = email;
         mIdentity.oauthId = oauthId;
         mIdentity.setIdToken(token);
         mAuthorities.set(rights);
     }
 
     public UserModel(UserEntity entity, String idToken, List<GrantedAuthority> rights) {
-        this(entity.getId(), entity.getDomain().getId(), entity.getUsername(), idToken, rights);
+        this(entity.getId(), entity.getDomain().getId(), entity.getUsername(), entity.getEmail(), idToken, rights);
     }
 
     public long getUuid() { return mUserId;}
