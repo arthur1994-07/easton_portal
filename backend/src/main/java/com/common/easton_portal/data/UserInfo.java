@@ -37,14 +37,16 @@ public class UserInfo {
         }
     }
 
-    public static class Profile {
+    public static class Profile{
         @JsonProperty public long uuid;
         @JsonProperty public String username;
+        @JsonProperty public String email;
 
         public Profile() {}
         public Profile(UserModel model) {
             this.username = model.getIdentity().getName();
             this.uuid = model.getUuid();
+            this.email = model.getIdentity().getEmail();
         }
     }
 }

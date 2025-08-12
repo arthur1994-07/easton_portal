@@ -9,8 +9,10 @@ import com.common.easton_portal.core.SignerProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -47,6 +49,7 @@ public class SecurityConfiguration {
             @Autowired @Qualifier(SignerNameConstant.authentication) SignerProvider signer) {
         return new AuthenticationTokenFilter(signer);
     }
+
 
     @Bean(name= SignerNameConstant.authentication)
     public static SignerProvider authSigner() {

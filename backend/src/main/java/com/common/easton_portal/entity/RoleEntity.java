@@ -30,5 +30,5 @@ public class RoleEntity {
     private final Set<String> rights = new HashSet<>();
 
     @ManyToMany(mappedBy = "roles")
-    private final Set<UserEntity> users  = new HashSet<>();
+    private final Set<UserEntity> users = new HashSet<>();
 }
