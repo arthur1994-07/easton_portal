@@ -26,7 +26,7 @@ public class RoleService {
     @Retryable(value = {LockAcquisitionException.class }, maxAttemptsExpression = "${retry.maxAttempts}",
             backoff = @Backoff(delayExpression = "${retry.maxDelay}"))
     @Transactional(isolation = Isolation.SERIALIZABLE)
-    public void create(String name) throws Exception {
+    public synchronized void create(String name) throws Exception {
         if (mRepository.findByName(name).isPresent()) throw new Exception("Name is already exist");
 
         mRepository.save(RoleEntity.builder().name(name).build());
@@ -43,7 +43,6 @@ public class RoleService {
             throw new Exception(String.format("User [%s] is used for this role", String.join(",", usedList)));
         }
         mRepository.delete(entity);
-
         return new RoleInfo.Base(entity);
     }
 
