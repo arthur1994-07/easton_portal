@@ -124,7 +124,6 @@ export default defineComponent ({
 		onMounted(async () => {
 			try {
 				roles.value = await RoleService.list()
-				console.log(roles.value)
 				selectedRole.value = null
 				editMode.value = false
 			} catch(err) {

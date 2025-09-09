@@ -169,7 +169,6 @@ export default defineComponent({
 
 		const changeGroupState = (item) => {
 			groupsState.value[item.key] = !groupsState.value[item.key];
-			console.log(groupsState.value)
 			if (groupsState.value[item.key]) activeKey.value = item.key;
 		}
 

@@ -8,6 +8,7 @@ const _settingsGrp = 'settings'
 // const _organizationGrp = 'organization'
 // const _userGrp = 'user'
 const _collectionGrp = 'collection'
+const _managementGrp = 'management'
 
 const createSettingGroup = () => ({
 	icon: "mdi-cog",
@@ -23,14 +24,12 @@ const createCollectionGroup = () => ({
 	order: 2,
 })
 
-
-
-// const createOrganizationGroup = () => ({
-// 	icon: "mdi-account-supervisor",
-// 	title: "Organization",
-// 	key: _organizationGrp,
-// 	order: 2
-// })
+const createManagementGroup = () => ({
+	icon: "mdi-folder-account",
+	title: "Management",
+	key: _managementGrp,
+	order: 3,
+})
 
 // page property
 
@@ -60,17 +59,6 @@ const createDashboardView = () => ({
 	}
 })
 
-// const createUserProfileView = () => ({
-// 	path: "user-profile",
-// 	name: "User Profile",
-// 	component : () => import("../../views/UserProfileView.vue"),
-// 	meta: {
-// 		icon: 'mdi-human-greeting',
-// 		title: 'User Profile',
-// 		group: _settingsGrp,
-// 		order: 1
-// 	}
-// })
 
 const createCollectionListView = () => ({
 	path: "collection-list",
@@ -78,38 +66,39 @@ const createCollectionListView = () => ({
 	component : () => import("../../views/EditCollectionListView.vue"),
 	meta: {
 		icon: 'mdi-gift',
-		title: 'Collection Action',
-		permission: [PermissionType.COLLECTION],
+		title: 'Collection List',
+		permission: [PermissionType.TRIAL_USER],
 		group: _collectionGrp,
 		order: 1
 	}
 })
 
-const createCollectionActionView = () => ({
-	path: "collection-action",
-	name: "Collection Action",
-	component : () => import("../../views/EditCollectionActionView.vue"),
+const createQuotationRequestView = () => ({
+	path: "quotation-request",
+	name: "Quotation Request",
+	component : () => import("../../views/EditQuotationRequestView.vue"),
 	meta: {
-		icon: 'mdi-email-alert',
-		title: 'Collection Action',
-		permission: [PermissionType.COLLECTION],
-		group: _collectionGrp,
+		icon: 'mdi-file-document',
+		title: 'Quotation Request',
+		permission: [PermissionType.QUOTATION_USER],
+		group: _managementGrp,
 		order: 2
 	}
 })
 
-// const createOrganizationView = () => ({
-// 	path: "organization",
-// 	name: "Organization Management",
-// 	component: () => import("../../views/EditOrganizationView.vue"),
-// 	meta: {
-// 		icon: 'mdi-account-group',
-// 		title: 'Organization Management',
-// 		permission : [PermissionType.CREATE_DELETE_ORGANIZATION, PermissionType.CREATE_DELETE_ORGANIZATION_FOR_SUPERUSER],
-// 		group: _organizationGrp,
-// 		order: 1
-// 	}
-// })
+const createQuotationStatusView = () => ({
+	path: "quotation-status",
+	name: "Quotation Status",
+	component : () => import("../../views/EditQuotationStatusView.vue"),
+	meta: {
+		icon: 'mdi-alert',
+		title: 'Quotation Status',
+		permission: [PermissionType.TRIAL_USER],
+		group: _collectionGrp,
+		order: 3
+	}
+})
+
 
 const createRoleView = () => ({
 	path: "user-role",
@@ -129,7 +118,7 @@ const createUsersListView = () => ({
 	name: "Users Settings",
 	component: () => import("../../views/UsersSettingsView.vue"),
 	meta: {
-		icon: 'mdi-account-multiple',
+		icon: 'mdi-account-box',
 		title: 'Users Settings',
 		permission : [PermissionType.USER],
 		group: _settingsGrp,
@@ -141,18 +130,16 @@ const createUsersListView = () => ({
 const treeItems = [
 	createLoginView(),
 	createPortalView([
-		// createOrganizationGroup(),
 		createCollectionGroup(),
 		createSettingGroup(),
+		createManagementGroup(),
 	], [
 		createDashboardView(),
-		// createOrganizationView(),
 		createRoleView(),
 		createUsersListView(),
-		createCollectionActionView(),
+		createQuotationRequestView(),
+		createQuotationStatusView(),
 		createCollectionListView(),
-
-		// createUserProfileView(),
 	]),	
 ].filter(s => s != null);
 
