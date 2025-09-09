@@ -59,9 +59,8 @@ public class AuthService {
         public OAuthAuthorizeCodeRequest() { grant_type = "authorization_code"; }
     }
 
-
-    @Autowired private OAuthRepository mOAuthRepository;
     @Autowired private PermissionSystem<RightAnnotation> mPermissionSystem;
+    @Autowired private OAuthRepository mOAuthRepository;
     @Autowired private UserRepository mUserRepository;
     @Autowired private EncryptedProvider mEncryptor;
 

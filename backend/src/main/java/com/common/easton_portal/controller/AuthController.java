@@ -20,7 +20,7 @@ public class AuthController {
         public String redirectUri;
     }
 
-    @Autowired private AuthService mService;
+    @Autowired private AuthService mAuthService;
 
 
     @Operation(summary = "Generate a new refresh token",
@@ -30,7 +30,7 @@ public class AuthController {
     public ResponseEntity<JsonRespond<SecurityTokenInfo>> refreshToken() throws Throwable {
         var authUser = UserModel.getCurrent();
         if (authUser == null) throw new Error("Token is expired");
-        return ResponseEntity.ok(new JsonRespond<>(mService.refreshToken(authUser)));
+        return ResponseEntity.ok(new JsonRespond<>(mAuthService.refreshToken(authUser)));
     }
 
 
@@ -38,7 +38,7 @@ public class AuthController {
             description = "Request to login for given oauth id and its oauth content")
     @PostMapping("/public/oAuth/authenticate")
     public ResponseEntity<JsonRespond<SecurityTokenInfo>> oAuthAuthentication(@RequestBody OAuthAuthenticationRequest request) throws Throwable {
-        var token = mService.authenticateWithOAuth(request.id, request.code, request.redirectUri);
+        var token = mAuthService.authenticateWithOAuth(request.id, request.code, request.redirectUri);
         return ResponseEntity.ok(new JsonRespond<>(token));
     }
 }
