@@ -50,8 +50,9 @@ public class RequestService {
     @Retryable(value = {LockAcquisitionException.class }, maxAttemptsExpression = "${retry.maxAttempts}",
             backoff = @Backoff(delayExpression = "${retry.maxDelay}"))
     @Transactional(readOnly = true, isolation = Isolation.READ_COMMITTED)
-    public List<RequestInfo.Data> getTreatedRequest() {
-        var entities = mRequestRepository.findAll().stream().filter(s -> s.getQuotation() != null).toList();
+    public List<RequestInfo.Data> getTreatedRequest(long id) {
+        var test = mRequestRepository.findByCustomerId(id);
+        var entities = mRequestRepository.findByCustomerId(id).stream().filter(s -> s.getQuotation() != null).toList();
         return entities.stream().map(RequestInfo.Data::new).toList();
     }
 

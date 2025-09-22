@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.yaml.snakeyaml.events.Event;
 
 import java.util.List;
 
@@ -55,8 +56,8 @@ public class RequestController {
     @Operation(summary = "get responded quotation request", description = "")
     @PostMapping(value = "/get-treated-request")
     @PreAuthorize("hasPermission('null', '" + PermissionConstant.EDIT_TRIAL_USER + "')")
-    public ResponseEntity<JsonRespond<List<RequestInfo.Data>>> getTreatedRequest() throws Throwable {
-        return ResponseEntity.ok(new JsonRespond<>(mRequestService.getTreatedRequest()));
+    public ResponseEntity<JsonRespond<List<RequestInfo.Data>>> getTreatedRequest(@RequestBody IDRequest request) throws Throwable {
+        return ResponseEntity.ok(new JsonRespond<>(mRequestService.getTreatedRequest(request.id)));
     }
 
     @Operation(summary = "Remove request", description = "Remove a request for a given id")

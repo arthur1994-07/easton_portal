@@ -19,28 +19,20 @@
 						]"
 					/>
 				</div>
-				<q-btn class="row items-start" color="primary" @click="importQuotation()">
-					<q-icon name="mdi-import" color="white" />
-					<q-tooltip>import file</q-tooltip>
-				</q-btn>
 			</q-card-section>
-			<q-item class="text-black items-center">uploaded file : {{ file?.name }}</q-item>
+			<q-item class="text-black items-center">
+				<q-btn class="q-mx-lg row items-start" color="info" @click="importQuotation()">
+					<q-icon name="mdi-import" color="white" />
+				</q-btn>
+				<div>uploaded file : {{ file?.name }}</div>
+			</q-item>
+			
 		</template>
 	</two-button-dialog>
 	<q-page class="q-pa-sm">
 		<q-card class="bg-primary">
 			<q-card-section class="row justify-between">
 				<div class="text-section-color text-h6">Quotation Request</div>
-				<div>
-					<q-btn push class="q-mx-xs" color="white" @click="console.log('test')">
-						<q-icon color="primary" name="mdi-content-save" />
-						<q-tooltip>save</q-tooltip>
-					</q-btn>
-					<q-btn push class="q-mx-xs" color="white" @click="console.log('test')">
-						<q-icon color="primary" name="mdi-pencil" />
-						<q-tooltip>Edit Right(s) for Selected Role</q-tooltip>
-					</q-btn>
-				</div>
 			</q-card-section>
 			<q-separator dark />
 			<div class="row q-ma-sm">
@@ -133,7 +125,7 @@ export default defineComponent ({
 
 			try {
 				await RequestService.remove({ id : item.id });
-				items.value = await RequestService.list()
+				items.value = await RequestService.findQuotationRequest()
 				selectedItem.value = null
 				PopupDialog.show(store, PopupDialog.SUCCESS, 'Successfully removed quotation request');
 			} catch(err) {

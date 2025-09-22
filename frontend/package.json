@@ -21,7 +21,7 @@
 		"moment": "^2.29.4",
 		"mosha-vue-toastify": "^1.0.23",
 		"quasar": "^2.11.3",
-		"swiper": "^10.2.0",
+		"swiper": "^11.1.14",
 		"tiny-emitter": "^2.1.0",
 		"uuid": "^9.0.0",
 		"vue": "^3.2.45",

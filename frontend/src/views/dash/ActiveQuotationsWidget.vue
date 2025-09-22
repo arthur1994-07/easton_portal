@@ -15,6 +15,7 @@
 import { defineComponent, onMounted, ref } from "vue";
 import { useStore } from 'vuex'
 import RequestService from "../../script/services/RequestService.js";
+import CurrentUserService from "../../script/services/CurrentUserService.js";
 import * as PopupDialog from '../../script/utils/PopupDialog.js'
 
 export default defineComponent ({
@@ -24,8 +25,8 @@ export default defineComponent ({
 
 		onMounted(async () => {
 			try {
-				items.value = await RequestService.findQuotation()
-				console.log(items.value)
+				const current = await CurrentUserService.current()
+				items.value = await RequestService.findQuotation({id: current.uuid})
 			} catch(err) {
 				PopupDialog.show(store, PopupDialog.FAILURE, err.message)
 			}

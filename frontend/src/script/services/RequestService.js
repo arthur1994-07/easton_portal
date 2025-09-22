@@ -9,6 +9,11 @@ const create = async (request) => {
 	return response.data.data
 }
 
+const remove = async (request) => {
+	const response = await post(_baseUrl + "/delete", request)
+	return response.data.data
+}
+
 const findQuotationRequest = async (request) => {
 	const response = await post(_baseUrl + "/get-untreated-request", request)
 	return response.data.data
@@ -21,6 +26,7 @@ const findQuotation = async (request) => {
 
 export default {
 	create,
+	remove,
 	findQuotation,
 	findQuotationRequest
 }
