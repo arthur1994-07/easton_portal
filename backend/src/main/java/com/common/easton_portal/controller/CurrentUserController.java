@@ -1,6 +1,7 @@
 package com.common.easton_portal.controller;
 
 import com.common.core.web.struct.JsonRespond;
+import com.common.easton_portal.constants.PermissionConstant;
 import com.common.easton_portal.data.UserInfo;
 import com.common.easton_portal.model.UserModel;
 import com.common.easton_portal.service.OAuthService;
@@ -51,6 +52,7 @@ public class CurrentUserController {
     public ResponseEntity<JsonRespond<UserInfo.Profile>> getProfile() throws Throwable {
         var current = UserModel.getCurrent();
         if (current == null) throw new Exception("current user not found");
+
         return ResponseEntity.ok(new JsonRespond<>(new UserInfo.Profile(current)));
     }
 }

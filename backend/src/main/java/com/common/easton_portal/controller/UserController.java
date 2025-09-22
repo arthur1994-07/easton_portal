@@ -68,4 +68,11 @@ public class UserController {
 //        mAuditLog.log(CatalogID.K_ID_USER_UPDATE, "User role is updated");
         return ResponseEntity.ok(new JsonRespond<>(null));
     }
+
+    @PostMapping(value = "/user-count")
+    @PreAuthorize("hasPermission('null', '" + PermissionConstant.EDIT_USER + "')")
+    public ResponseEntity<JsonRespond<Integer>> getUserCount() throws Throwable {
+        return ResponseEntity.ok(new JsonRespond<>(mService.getUserCount()));
+    }
+
 }

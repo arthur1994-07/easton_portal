@@ -65,6 +65,13 @@ public class UserService {
 
     @Retryable(value = {LockAcquisitionException.class }, maxAttemptsExpression = "${retry.maxAttempts}",
             backoff = @Backoff(delayExpression = "${retry.maxDelay}"))
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    public Integer getUserCount() {
+        return mUserRepository.findAll().size();
+    }
+
+    @Retryable(value = {LockAcquisitionException.class }, maxAttemptsExpression = "${retry.maxAttempts}",
+            backoff = @Backoff(delayExpression = "${retry.maxDelay}"))
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public void changeRole(long id, boolean administrator, long[] roles) throws Exception {
         var entity = mUserRepository.findById(id).orElseThrow(() -> new Exception("User not found"));

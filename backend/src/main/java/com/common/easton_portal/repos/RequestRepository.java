@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface RequestRepository extends JpaRepository<RequestEntity, Long> {
 //    Optional<RequestEntity> findAllByQuotation();
-    RequestEntity findByCustomerId(long id);
+    List<RequestEntity> findByCustomerId(long id);
     RequestEntity findByCollectionNameAndCustomerId(String collectionName, long id);
 // @Query(value = """
 //        SELECT r.id,
