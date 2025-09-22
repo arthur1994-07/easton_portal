@@ -10,7 +10,7 @@
 
 			<q-card-actions align="right">
 				<q-btn v-close-popup push :label="cancelText" color="white" text-color="primary" />
-				<q-btn push :label="successText" color="primary" :disable="!successAllow" @click="acceptAction" />
+				<q-btn push :label="successText" color="secondary" :disable="!successAllow" @click="acceptAction" />
 			</q-card-actions>
 		</q-card>
 	</q-dialog>

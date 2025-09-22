@@ -71,6 +71,7 @@ import { defineComponent, onMounted, ref } from "vue";
 import { useStore } from 'vuex'
 
 import RequestService from "../script/services/RequestService.js";
+import CurrentUserService from "../script/services/CurrentUserService.js";
 import TwoButtonDialog from '../components/TwoButtonDialog.vue'
 import * as PopupDialog from '../script/utils/PopupDialog.js'
 import QuotationStatusInfoComponent from "../components/QuotationStatusInfoComponent.vue";
@@ -84,6 +85,7 @@ export default defineComponent ({
 		const store = useStore()
 		const items = ref([])
 		const selectedItem = ref(null)
+		const current = ref(null)
 
 		
 		const removeDialog = ref(null)
@@ -93,7 +95,7 @@ export default defineComponent ({
 
 			try {
 				await RequestService.remove({ id : item.id });
-				items.value = await RequestService.list()
+				items.value = await RequestService.findQuotation({ id : current.value.uuid })
 				selectedItem.value = null
 				PopupDialog.show(store, PopupDialog.SUCCESS, 'Successfully removed quotation');
 			} catch(err) {
@@ -105,7 +107,8 @@ export default defineComponent ({
 
 
 		onMounted(async () => {
-			items.value = await RequestService.findQuotation()
+			current.value = await CurrentUserService.current()
+			items.value = await RequestService.findQuotation({ id : current.value.uuid })
 		})
 
 		return { items, removeDialog, selectedItem, removeAction, changeSelectedItem }

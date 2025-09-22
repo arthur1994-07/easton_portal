@@ -2,17 +2,18 @@
 
 import yaml from 'js-yaml'
 
-export const showFileDialog = async (accept) => {
+export const showFileDialog = async (accept, multiple = false) => {
 	return new Promise((resolve) => {
 		const input = document.createElement('input')
 		input.setAttribute("type", "file")
 		input.setAttribute("style", "display: none")
 		if (accept != null) input.setAttribute("accept", accept)
+		if (multiple) input.setAttribute("multiple", "multiple")
 
 		input.onchange = () => {
-			const file = input.files[0]
+			const files = multiple ? Array.from(input.files || []) : input.files[0] || null
 			document.body.removeChild(input)
-			resolve(file);
+			resolve(files);
 		};
 
 		document.body.appendChild(input)
@@ -26,7 +27,7 @@ export const showFileDialog = async (accept) => {
 				document.body.removeEventListener('mousemove', onMouseMove);
 				if (!input.files.length) {
 					document.body.removeChild(input);
-					resolve(null);
+					resolve(multiple ? [] : null);
 				}
 			}
 			window.addEventListener('focus', onFocus);

@@ -10,6 +10,9 @@
 						<q-img :src="companyLogo" fit="contain" class="q-ma-sm" style="max-width: 120px" />
 						<div class="q-ma-md">Easton Industrial Ltd</div>
 					</q-toolbar-title>
+					<q-icon v-if="notifications?.length != 0" class="q-mx-xl" name="mdi-alert-circle" color="red-4" size="xl">
+						<q-tooltip>New Notifications</q-tooltip>
+					</q-icon>
 				</q-toolbar>
 			</div>			
 		</q-header>
@@ -110,10 +113,11 @@ import { constructRouterTree, constructGroupItemState } from "../script/utils/cr
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import router from '../script/plugins/vuerouter'
-import * as SessionStorage from "../script/utils/session_storage.js";
-import * as PopupDialog from '../script/utils/PopupDialog.js'
 import auth from '../script/services/AuthService.js'
 import currentUserService from "../script/services/CurrentUserService.js";
+import NotificationService from "../script/services/NotificationService.js";
+import * as SessionStorage from "../script/utils/session_storage.js";
+import * as PopupDialog from '../script/utils/PopupDialog.js'
 
 export default defineComponent({
 	setup() {
@@ -126,9 +130,11 @@ export default defineComponent({
 		const mini = ref(true)
 		const companyLogo = ref(new URL('../assets/logo.png', import.meta.url).href)
 		const currentUser = ref(null)
+		const notifications = ref(null)
 
-		onMounted(() => {
+		onMounted(async () => {
 			const path = SessionStorage.retrieveValue(SessionStorage.targetPath)
+			notifications.value = await NotificationService.getData()
 			if (path == null) return
 			router.push(path)
 		})
@@ -181,7 +187,7 @@ export default defineComponent({
 				})
 		}
 
-		return { items, mini, currentUser, sliderBar, activeKey, groupsState, companyLogo,changeGroupState, navigateTo, signOut }
+		return { items, mini, notifications, currentUser, sliderBar, activeKey, groupsState, companyLogo,changeGroupState, navigateTo, signOut }
 	}
 })
 
