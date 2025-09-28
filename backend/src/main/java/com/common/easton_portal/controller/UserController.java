@@ -69,8 +69,13 @@ public class UserController {
         return ResponseEntity.ok(new JsonRespond<>(null));
     }
 
-    @PostMapping(value = "/user-count")
+    @PostMapping(value = "/get-domain")
     @PreAuthorize("hasPermission('null', '" + PermissionConstant.EDIT_USER + "')")
+    public ResponseEntity<JsonRespond<Long>> getDomainInfo(@RequestBody IDRequest request) throws Throwable {
+        return ResponseEntity.ok(new JsonRespond<>(mService.getDomainInfo(request.id)));
+    }
+
+    @PostMapping(value = "/user-count")
     public ResponseEntity<JsonRespond<Integer>> getUserCount() throws Throwable {
         return ResponseEntity.ok(new JsonRespond<>(mService.getUserCount()));
     }

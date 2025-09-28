@@ -18,7 +18,6 @@ public class QuotationEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "quotation")
     @SequenceGenerator(name = "quotation", sequenceName = "z_quotation", initialValue = 1, allocationSize = 1)
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(columnDefinition = "TEXT")
@@ -26,7 +25,7 @@ public class QuotationEntity {
     private String quoteNum;
 
     @Column(columnDefinition = "TEXT")
-    private String assignee;
+    private String assigneeEmail;
 
     @Lob
     @Basic(fetch = FetchType.LAZY)

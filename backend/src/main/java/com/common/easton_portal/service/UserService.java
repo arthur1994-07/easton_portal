@@ -6,6 +6,7 @@ import com.common.easton_portal.repos.RoleRepository;
 import com.common.easton_portal.repos.UserRepository;
 import org.hibernate.exception.LockAcquisitionException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.expression.ExpressionException;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
@@ -40,7 +41,7 @@ public class UserService {
             backoff = @Backoff(delayExpression = "${retry.maxDelay}"))
     @Transactional(readOnly = true, isolation = Isolation.READ_COMMITTED)
     public UserInfo.Data[] list(long domainId) throws Exception {
-        var oauthEntity = mOAuthRepository.findById(domainId).orElseThrow(() -> new Exception("OAuth service is not found"));
+        var oauthEntity = mOAuthRepository.findById(domainId).orElseThrow(() -> new Exception("OAuth domain is not found"));
         return mUserRepository.findByDomain(oauthEntity).stream().map(UserInfo.Data::new).toArray(UserInfo.Data[]::new);
     }
 
@@ -61,6 +62,14 @@ public class UserService {
         entity.setDisable(!active);
         mUserRepository.saveAndFlush(entity);
         return new UserInfo.Base(entity);
+    }
+
+    @Retryable(value = {LockAcquisitionException.class }, maxAttemptsExpression = "${retry.maxAttempts}",
+            backoff = @Backoff(delayExpression = "${retry.maxDelay}"))
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    public Long getDomainInfo(long id) throws Exception {
+        var userEntity = mUserRepository.findById(id).orElseThrow(() -> new Exception("User not found"));
+        return userEntity.getDomain().getId();
     }
 
     @Retryable(value = {LockAcquisitionException.class }, maxAttemptsExpression = "${retry.maxAttempts}",

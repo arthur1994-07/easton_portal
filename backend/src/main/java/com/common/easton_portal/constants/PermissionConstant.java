@@ -5,8 +5,6 @@ import com.common.core.web.permission.RightAnnotation;
 public class PermissionConstant {
     @RightAnnotation(displayKey = "User Management")
     public final static String EDIT_USER = "edit_user";
-    @RightAnnotation(displayKey = "Trial User")
-    public final static String EDIT_TRIAL_USER = "edit_trial_user";
     @RightAnnotation(displayKey = "Audit Log Management")
     public final static String EDIT_AUDIT_LOG = "edit_audit_log";
     @RightAnnotation(displayKey = "Quotation Management")
