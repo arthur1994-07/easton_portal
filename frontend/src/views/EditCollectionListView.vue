@@ -80,7 +80,7 @@
 			<q-card-section class="row justify-between">
 				<div class="text-section-color text-h6">Collection List</div>
 				<div>
-					<q-btn push class="q-mx-xs" color="white" @click="editAction(null)">
+					<q-btn v-if="haveRights" push class="q-mx-xs" color="white" @click="editAction(null)">
 						<q-icon color="primary" name="mdi-plus" />
 						<q-tooltip>Collection</q-tooltip>
 					</q-btn>
@@ -107,11 +107,11 @@
 				<template v-slot:body-cell-actions="{ row }">
 					<q-td>
 						<div class="row justify-center">
-							<q-item clickable class="q-py-none q-px-xs" style="min-height : 0;" @click="editAction(row)">
+							<q-item v-if="haveRights" clickable class="q-py-none q-px-xs" style="min-height : 0;" @click="editAction(row)">
 								<q-icon size="sm" color="white" name="mdi-pencil" />
 								<q-tooltip>edit item</q-tooltip>
 							</q-item>
-							<q-item clickable class="q-py-none q-px-xs" style="min-height : 0;" @click="removeAction(row)">
+							<q-item v-if="haveRights" clickable class="q-py-none q-px-xs" style="min-height : 0;" @click="removeAction(row)">
 								<q-icon size="sm" color="white" name="mdi-delete" />
 								<q-tooltip>delete item</q-tooltip>
 							</q-item>
@@ -132,7 +132,7 @@
 </template>
 
 <script>
-import { ref, defineComponent, onMounted, readonly, watch } from "vue";
+import { ref, defineComponent, onMounted, readonly, watch, computed } from "vue";
 import { useStore } from 'vuex';
 import { dataUrlToBase64String, fileToDataUrl, showFileDialog } from '../script/utils/utils.js'
 import * as PopupDialog from '../script/utils/PopupDialog.js'
@@ -153,19 +153,24 @@ export default defineComponent ({
 	},
 	setup() {
 		const store = useStore()
-		const items = ref([])
+		
 		const createMode = ref(false)
 		const requestDialog = ref(null)
 		const createDialog = ref(null)
 		const displayDialog = ref(null)
 		const path = ref(null)
 		const currentUser = ref(null)
+		const model = ref(null)
+		const isProtected = ref(false)
+
+		const rights = ref([])
+		const imageCollections = ref([])
 		const collections = ref([])
 		const base64Profiles = ref([])
 		const listOfYears = ref([])
-		const model = ref(null)
-		const isProtected = ref(false)
-		const imageCollections = ref([])
+		const items = ref([])
+
+		const haveRights = computed(() => rights?.value.find(s => s == 'edit_collection') != null)
 
 		const columns = readonly([
 			{ name: 'name', required: true, label: 'name', align: 'left', field: 'name', sortable: true },
@@ -198,6 +203,7 @@ export default defineComponent ({
 		}
 
 		const editAction = async (item) => {
+			getListOfYears()
 			createMode.value = item == null
 			base64Profiles.value = null
 			let data = await createDialog.value.run({
@@ -296,19 +302,20 @@ export default defineComponent ({
 
 		onMounted(async () => {
 			try{
-				getListOfYears()
 				currentUser.value = await CurrentUserService.current()
+				rights.value = await CurrentUserService.permission()
+				console.log(haveRights.value)
 				path.value = await WebService.getInfo()
+
 				const accessToken = await CollectionService.webAuthenticate(currentUser.value.uuid, currentUser.value.username, path.value.url)
 				window.sessionStorage.setItem("accessToken", accessToken)
-
 				items.value = await CollectionService.list(accessToken, path.value.url)
 			} catch(err) {
 				PopupDialog.show(store, PopupDialog.FAILURE, err.message)
 			}
 		})
 
-		return { model, isProtected, items, imageCollections, columns, collections, listOfYears, createMode, displayDialog, createDialog, removeDialog, requestDialog, 
+		return { model, isProtected, items, imageCollections, columns, collections, listOfYears, createMode, displayDialog, createDialog, removeDialog, requestDialog, haveRights,
 			importCollectionPictures, removeAction, editAction, displayAction, requestAction }
 	}
 })
