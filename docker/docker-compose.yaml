@@ -1,0 +1,27 @@
+services:
+  backend:
+    build:
+      context: backend
+      dockerfile: Dockerfile
+    container_name: easton-portal-backend
+    ports:
+      - 7777:7777
+    environment:
+      - DATABASE_TYPE=pgsql
+      - DB_HOST=192.168.56.107
+      - DB_NAME=easton_portal
+      - DB_PASSWORD=docker
+      - DB_PORT=5444
+      - DEBUG=true
+      #- SUPER_USERNAME
+      #- SUPER_PASSWORD
+      #- USE_DEFAULT_DATA
+  frontend:
+    build:
+        context: frontend
+        dockerfile: Dockerfile
+    container_name: easton-portal-frontend
+    ports:
+      - 7070:7070
+    volumes:
+      - '/node_modules'
