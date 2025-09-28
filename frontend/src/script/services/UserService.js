@@ -26,9 +26,21 @@ const changeRole = async (request) => {
 	return response.data.data;
 }
 
+const userCount = async (request) => {
+	const response = await post(_baseUrl + "/user-count", request)
+	return response.data.data
+}
+
+const getDomain = async (request) => {
+	const response = await post(_baseUrl + "/get-domain", request)
+	return response.data.data
+}
+
 export default {
 	list,
 	remove,
 	changeActive,
 	changeRole,
+	userCount,
+	getDomain
 }

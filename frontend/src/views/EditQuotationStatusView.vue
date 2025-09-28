@@ -23,19 +23,19 @@
 									:active="selectedItem?.id == item.id" active-class="bg-green-8" @click="changeSelectedItem(item)"
 								>
 									<q-item-section avatar>
-										<q-icon size="sm" name="mdi-account-group" color="white" />
+										<q-icon size="sm" name="mdi-file-document" color="white" />
 									</q-item-section>
 									<q-item-section class="text-white text-left">{{ item.collectionName }} - {{ item.customerEmail }}</q-item-section>
 									<q-item-section side>
 										<q-btn flat dense round icon="mdi-dots-vertical">
 											<q-menu fit class="text-no-wrap bg-accent">
 												<q-list>
-													<q-item v-close-popup clickable @click="editAction(item)">
+													<!-- <q-item v-close-popup clickable @click="editAction(item)">
 														<q-item-section avatar>
 															<q-icon color="white" name="mdi-rename-box" />
 														</q-item-section>
 														<q-item-section>edit quotation</q-item-section>
-													</q-item>
+													</q-item> -->
 													<q-item v-close-popup clickable @click="removeAction(item)">
 														<q-item-section avatar>
 															<q-icon color="white" name="mdi-delete" />
@@ -54,8 +54,8 @@
 						</q-list>
 					</q-scroll-area>
 				</div>
-				<q-separator dark vertical />
-				<div v-if="$q.screen.gt.sm" class="row col-grow">
+				<!-- <q-separator dark vertical /> -->
+				<div v-if="$q.screen.gt.sm" class="row col-grow card-section">
 					<q-separator dark vertical />
 					<q-scroll-area class="col-grow q-ma-sm">
 						<quotation-status-info-component v-if="selectedItem" :quotation="selectedItem" />	
@@ -115,3 +115,14 @@ export default defineComponent ({
 	}
 })
 </script>
+
+<style>
+
+.card-section {
+	/* background-color: rgb(25, 95, 57); */
+	min-height: 30vh;
+	border-style: inset;
+	border-width: 5px;
+}
+
+</style>

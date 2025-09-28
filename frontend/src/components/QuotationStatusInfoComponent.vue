@@ -1,5 +1,12 @@
 <template>
 	<q-list class="column no-wrap">
+		<q-item-section class="q-ma-sm text-h4 title">
+			<q-item class="text-center justify-center">
+				<q-icon class="q-mx-sm" color="white" name="mdi-note-text" />
+				Quotation Info
+			</q-item>
+		</q-item-section>
+		<q-separator dark class="q-ma-md" />
 		<q-card-section class="justify-between">
 			<div class="col column">
 				<div class="text-left">
@@ -54,3 +61,10 @@ export default defineComponent({
 	}
 })
 </script>
+
+<style>
+.title {
+	background-color: rgb(115, 116, 115);
+}
+
+</style>

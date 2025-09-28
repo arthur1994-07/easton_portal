@@ -175,7 +175,6 @@ export default defineComponent ({
 		const displayAction = async (item) => {	
 			if (item == null) return
 			imageCollections.value = await CollectionService.findImageById({ id: item.id }, path.value.url)
-			console.log(imageCollections.value)
 			let data = await displayDialog.value.run({
 				images : imageCollections.value
 			})

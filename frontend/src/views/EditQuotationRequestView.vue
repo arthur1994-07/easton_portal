@@ -26,7 +26,6 @@
 				</q-btn>
 				<div>uploaded file : {{ file?.name }}</div>
 			</q-item>
-			
 		</template>
 	</two-button-dialog>
 	<q-page class="q-pa-sm">
@@ -141,18 +140,19 @@ export default defineComponent ({
 			let data = await editDialog.value.run(
 				{ 
 					quoteNum: item?.quoteNum,
-					assignee: currentUser.value.email,
+					assigneeEmail: currentUser.value.email,
+					assigneeName: currentUser.value.username,
 					requestId: item.id,
 				},{
 					successCheck : (data) => data.quoteNum != undefined && base64Profile.value != null
 				});
 			if (data == null) return
-			console.log(data)
 
 			try {
 				await QuotationService.create({
 					quoteNum: data.quoteNum,
-					assignee: data.assignee,
+					assigneeEmail: data.assigneeEmail,
+					assigneeName: data.assigneeName,
 					base64Profile: base64Profile.value,
 					requestId: data.requestId
 				})

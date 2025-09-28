@@ -107,6 +107,7 @@ import UserInfoComponent from '../components/UserInfoComponent.vue'
 import RoleService from "../script/services/RoleService.js";
 import UserService from '../script/services/UserService.js'
 import * as PopupDialog from '../script/utils/PopupDialog.js'
+import CurrentUserService from "../script/services/CurrentUserService.js";
 
 
 
@@ -123,7 +124,7 @@ export default defineComponent ({
 		const currentPage = ref(1)
 		const totalPages = ref(0)
 		const unsortedUsers = ref([])
-		const domainId = ref(2)
+		const domainId = ref(null)
 		const users =  computed(() => [...unsortedUsers.value].sort((a, b) => {
 			return a.accountName ?? a.email < b.accountName ?? b.email ? 
 				-1 : (a.accountName ?? a.email > b.accountName ?? b.email ? 1 : 0) 
@@ -132,6 +133,9 @@ export default defineComponent ({
 
 		onMounted(async () => {
 			try {
+				const current = await CurrentUserService.current();
+				console.log(current)
+				const domainId = await UserService.getDomain({id: current.uuid});
 				unsortedUsers.value = await UserService.list({ domainId : domainId.value })
 				selectedUser.value = null
 			} catch(err) {

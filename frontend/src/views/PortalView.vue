@@ -7,8 +7,8 @@
 						@click="sliderBar = !sliderBar"
 					/>
 					<q-toolbar-title class="row">
-						<q-img :src="companyLogo" fit="contain" class="q-ma-sm" style="max-width: 120px" />
-						<div class="q-ma-md">Easton Industrial Ltd</div>
+						<q-img :src="companyLogo" fit="contain" class="q-ma-sm item-center" style="max-width: 120px" />
+						<div v-if="!$q.screen.lt.md" class="item-center q-ma-md">Easton Industrial Ltd</div>
 					</q-toolbar-title>
 					<q-icon v-if="notifications?.length != 0" class="q-mx-xl" name="mdi-alert-circle" color="red-4" size="xl">
 						<q-tooltip>New Notifications</q-tooltip>
