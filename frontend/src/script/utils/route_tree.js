@@ -67,7 +67,6 @@ const createCollectionListView = () => ({
 	meta: {
 		icon: 'mdi-gift',
 		title: 'Collection List',
-		permission: [PermissionType.TRIAL_USER],
 		group: _collectionGrp,
 		order: 1
 	}
@@ -93,7 +92,6 @@ const createQuotationStatusView = () => ({
 	meta: {
 		icon: 'mdi-alert',
 		title: 'Quotation Status',
-		permission: [PermissionType.TRIAL_USER],
 		group: _collectionGrp,
 		order: 3
 	}

@@ -3,7 +3,7 @@
 		<h3>Total Users</h3>
 		<q-item>
 			<q-item-section>
-				<div class="user-number">2,847</div>
+				<div class="user-number">{{ userCount }}</div>
 				<div class="user-active">Active users</div>
 			</q-item-section>
 			<q-item-section class="justify-center">
@@ -18,10 +18,19 @@
 </template>
 
 <script>
-import { defineComponent } from "vue";
+import { defineComponent, ref, onMounted } from "vue";
+import UserService from "../../script/services/UserService.js";
 
 export default defineComponent ({
 	setup() {
+		const userCount = ref(0)
+
+		onMounted(async () => {
+			userCount.value = await UserService.userCount()
+		})
+
+		return { userCount }
+
 	}
 })
 </script>

@@ -1,6 +1,5 @@
 package com.common.easton_portal.controller;
 
-import com.common.core.base.helper.StringHelper;
 import com.common.core.web.struct.JsonRespond;
 import com.common.easton_portal.data.OAuthDomainInfo;
 import com.common.easton_portal.service.OAuthService;
@@ -8,7 +7,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;

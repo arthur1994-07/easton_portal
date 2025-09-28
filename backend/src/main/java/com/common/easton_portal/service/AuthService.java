@@ -77,7 +77,7 @@ public class AuthService {
 
         var user = updateUserEntity(response, domain);
         if (user == null) return new SecurityTokenInfo();
-        var rights = calculateRights(user, !hasDomainAdmin(), mPermissionSystem);
+        var rights = calculateRights(user, needTemporaryAdmin(id), mPermissionSystem);
         return createTokenInfo(new UserModel(user.getId(), user.getDomain().getId(), user.getUsername(), user.getEmail(), response.id_token, rights), response.id_token, null);
     }
 
@@ -178,4 +178,12 @@ public class AuthService {
         });
     }
 
+    private boolean needTemporaryAdmin(long id) throws Exception {
+        var domain = mOAuthRepository.findById(id).orElseThrow(() -> new Exception("Domain not found"));
+        // set first user as admin
+        if (domain.users.size() == 1) {
+            domain.users.get(0).setAdministrator(true);
+        }
+        return domain.users.size() <= 1;
+    }
 }

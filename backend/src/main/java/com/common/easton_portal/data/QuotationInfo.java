@@ -4,7 +4,6 @@ import com.common.easton_portal.entity.QuotationEntity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.sql.Blob;
-import java.util.Base64;
 
 public class QuotationInfo {
     public static class Base {
@@ -23,7 +22,7 @@ public class QuotationInfo {
         public Base(QuotationEntity entity) {
             this.id = entity.getId();
             this.quoteNum = entity.getQuoteNum();
-            this.assignee = entity.getAssignee();
+            this.assignee = entity.getAssigneeEmail();
             this.document = LobHelper.getBytes(entity.getDocument());
         }
     }

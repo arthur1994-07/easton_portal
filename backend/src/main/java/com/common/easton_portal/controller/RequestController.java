@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.yaml.snakeyaml.events.Event;
+
 
 import java.util.List;
 
@@ -35,12 +35,12 @@ public class RequestController {
 
     @Operation(summary = "Create a quotation request", description = "Create a quotation request")
     @PostMapping(value = "/create")
-    @PreAuthorize("hasPermission('null', '" + PermissionConstant.EDIT_TRIAL_USER + "')")
     public ResponseEntity<JsonRespond<Void>> create(@RequestBody CreateRequest request) throws Throwable {
         if (request.customerId < 0) throw new Exception("Invalid customer ID");
         if (StringHelper.isNullOrEmpty(request.collectionName) ||
                 StringHelper.isNullOrEmpty(request.customerEmail))
             throw new Exception("Cannot request quotation: collection / email missing");
+
         mRequestService.create(request.customerId, request.customerName, request.customerEmail,
                 request.collectionName, request.remarks);
         return ResponseEntity.ok(new JsonRespond<>(null));
@@ -55,14 +55,12 @@ public class RequestController {
 
     @Operation(summary = "get responded quotation request", description = "")
     @PostMapping(value = "/get-treated-request")
-    @PreAuthorize("hasPermission('null', '" + PermissionConstant.EDIT_TRIAL_USER + "')")
     public ResponseEntity<JsonRespond<List<RequestInfo.Data>>> getTreatedRequest(@RequestBody IDRequest request) throws Throwable {
         return ResponseEntity.ok(new JsonRespond<>(mRequestService.getTreatedRequest(request.id)));
     }
 
     @Operation(summary = "Remove request", description = "Remove a request for a given id")
     @PostMapping(value = "/delete")
-    @PreAuthorize("hasPermission('null', '" + PermissionConstant.EDIT_TRIAL_USER + "')")
     public ResponseEntity<JsonRespond<Void>> remove(@RequestBody IDRequest request) throws Exception {
         mRequestService.remove(request.id);
         return ResponseEntity.ok(new JsonRespond<>(null));

@@ -2,23 +2,30 @@ package com.common.easton_portal.service;
 
 import com.common.core.base.helper.StringHelper;
 import com.common.easton_portal.data.RequestInfo;
-import com.common.easton_portal.data.RoleInfo;
 import com.common.easton_portal.entity.RequestEntity;
-import com.common.easton_portal.entity.UserEntity;
+import com.common.easton_portal.enumerate.EmailType;
+import com.common.easton_portal.misc.EmailNotification;
 import com.common.easton_portal.repos.RequestRepository;
 import org.hibernate.exception.LockAcquisitionException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Service
 public class RequestService {
     @Autowired private RequestRepository mRequestRepository;
+    @Autowired private EmailNotification mEmail;
+
+    @Value("${app.email.sales}")
+    private String mMailTo;
 
     @Retryable(value = {LockAcquisitionException.class }, maxAttemptsExpression = "${retry.maxAttempts}",
             backoff = @Backoff(delayExpression = "${retry.maxDelay}"))
@@ -36,7 +43,11 @@ public class RequestService {
 
         var entity = RequestEntity.builder().customerId(customerId).customerName(customerName).customerEmail(customerEmail)
                 .collectionName(collectionName).remarks(remarks).createdDate(currentTime).build();
+
         mRequestRepository.saveAndFlush(entity);
+
+        mEmail.sendEmailNotification(mMailTo, new SimpleDateFormat("yyyy-MM-dd").format(new Date()),
+                customerEmail, customerName, null, EmailType.request);
     }
 
     @Retryable(value = {LockAcquisitionException.class }, maxAttemptsExpression = "${retry.maxAttempts}",

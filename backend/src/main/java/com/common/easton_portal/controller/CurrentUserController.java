@@ -1,7 +1,6 @@
 package com.common.easton_portal.controller;
 
 import com.common.core.web.struct.JsonRespond;
-import com.common.easton_portal.constants.PermissionConstant;
 import com.common.easton_portal.data.UserInfo;
 import com.common.easton_portal.model.UserModel;
 import com.common.easton_portal.service.OAuthService;

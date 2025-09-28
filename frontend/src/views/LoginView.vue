@@ -5,10 +5,12 @@
 				<div class="row items-center justify-center" 
 					style="min-height: inherit;"
 				>
-					<q-card class="bg-primary" style="width: 35vw">
+					<q-card class="bg-primary" style="min-width: 55vw">
 						<q-card-section>
 							<div class="q-ma-md">
-								<q-img :src="companyLogo" class="q-ma-lg justify-center items-center" fit="contain" style="min-height: 50px; width: 300px" />
+								<q-img :src="companyLogo" class="icon q-ma-lg justify-center items-center" fit="contain" 
+									style="max-height: 15vh;"
+								/>
 								<div class="col-1 q-ma-sm text-h6 text-white">Login portal</div>
 							</div>
 						</q-card-section>
@@ -121,3 +123,11 @@ export default defineComponent({
 	}
 })
 </script>
+
+<style>
+
+.icon {
+	min-height: auto;
+	min-width: auto;
+}
+</style>

@@ -3,13 +3,13 @@
 		<div class="text-h4">Notifications</div>
 		<div class="justify-between row q-pa-sm">
 			<div class="text-left">
-				<div class="justify-between row">	
-					<q-icon name="mdi-alert" color="red-4" size="xl"></q-icon>
-					<div class="col-grow text-left q-pa-md">{{ requestNot }}</div>
+				<div v-if="requestNot != ''" class="justify-between row">	
+					<q-icon name="mdi-alert" color="red-4" size="md" />
+					<div class="col text-left q-pa-md">{{ requestNot }}</div>
 				</div>
-				<div class="justify-between row">	
-					<q-icon name="mdi-alert" color="red-4" size="xl"></q-icon>
-					<div class="col-grow text-left q-pa-md">{{ quotationNot }}</div>
+				<div v-if="quotationNot != ''" class="justify-between row">	
+					<q-icon name="mdi-alert" color="red-4" size="md" />
+					<div class="col text-left q-pa-md">{{ quotationNot }}</div>
 				</div>
 			</div>
 		</div>

@@ -61,6 +61,6 @@ public class Notification {
 
         return requests.stream().map(s ->
             new NotificationInfo.Base(JsonHelper.toTree(s.getCollectionName()),
-                    NotificationType.QuotationReply.id, null, s.getQuotation().getAssignee())).toList();
+                    NotificationType.QuotationReply.id, null, s.getQuotation().getAssigneeEmail())).toList();
     }
 }

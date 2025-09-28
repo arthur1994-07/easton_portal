@@ -1,5 +1,12 @@
 <template>
 	<q-list class="column no-wrap">
+		<q-item-section class="q-ma-sm text-h4 title">
+			<q-item class="text-center justify-center">
+				<q-icon class="q-mx-sm" color="white" name="mdi-note-text" />
+				User Info
+			</q-item>
+		</q-item-section>
+		<q-separator dark class="q-ma-md" />
 		<div class="text-left q-pa-xs">
 			User : {{ user.accountName ?? user.email }}
 			<q-chip v-if="user.disable" color="red" size="sm" outline>
@@ -35,3 +42,10 @@ export default defineComponent({
 	}
 })
 </script>
+
+<style>
+.title {
+	background-color: rgb(12, 66, 36);
+}
+
+</style>
