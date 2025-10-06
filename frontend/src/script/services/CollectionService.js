@@ -63,7 +63,7 @@ const remove = async(request, accessToken, webUrl) => {
 	return response.data.data
 }
 
-const update = async (request, accessToken, webUrl) => {
+const updateImages = async (request, accessToken, webUrl) => {
 	if (request == null || accessToken == null) return
 	const response = await webPost(webUrl, "/image/update",
 		{
@@ -75,13 +75,27 @@ const update = async (request, accessToken, webUrl) => {
 	return response.data.data
 }
 
+const update = async (request, accessToken, webUrl) => {
+	if (request == null || accessToken == null) return
+	const response = await webPost(webUrl, "/collection/update",
+		{
+			id: request.id,
+			name: request.name,
+			year: request.year,
+			isProtected: request.isProtected,
+			image: request.image,
+		}, accessToken)
+	return response.data.data
+}
+
 
 
 export default {
 	webAuthenticate,
 	list,
 	create,
-	update, 
+	updateImages, 
+	update,
 	remove,
 	findImageById,
 	getImagesPage
