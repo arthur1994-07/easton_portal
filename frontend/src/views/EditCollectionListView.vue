@@ -287,7 +287,7 @@ export default defineComponent ({
 							name: data.name,
 							year: data.year,
 							isProtected: data.isProtected,
-							image: base64Profiles.value
+							image: base64Profiles?.value
 						}
 						, accessToken.value, path.value.url)
 					loadPageData(currentPage.value)
@@ -300,7 +300,7 @@ export default defineComponent ({
 							name: data.name,
 							year: data.year,
 							isProtected: data.isProtected,
-							image: base64Profiles.value
+							image: base64Profiles?.value
 						}
 						, accessToken.value, path.value.url)
 					loadPageData(currentPage.value)
