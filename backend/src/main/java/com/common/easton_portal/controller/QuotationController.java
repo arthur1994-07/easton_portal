@@ -33,7 +33,7 @@ public class QuotationController {
 
     @Operation(summary = "Create a quotation", description = "Create a quotation")
     @PostMapping(value = "/create")
-    @PreAuthorize("hasPermission('null', '" + PermissionConstant.EDIT_USER + "')")
+    @PreAuthorize("hasPermission('null', '" + PermissionConstant.EDIT_QUOTATION + "')")
     public ResponseEntity<JsonRespond<Void>> create(@RequestBody CreateRequest request) throws Throwable {
         if (request.quoteNum == null) throw new Exception("quotation number missing");
         if (request.base64Profile == null) throw new Exception("file missing");
@@ -46,12 +46,4 @@ public class QuotationController {
 
         return ResponseEntity.ok(new JsonRespond<>(null));
     }
-
-    @Operation(summary = "list quotation request", description = "list quotation request")
-    @PostMapping(value = "/list")
-    @PreAuthorize("hasPermission('null', '" + PermissionConstant.EDIT_USER + "')")
-    public ResponseEntity<JsonRespond<List<QuotationInfo.Base>>> list() throws Exception {
-        return ResponseEntity.ok(new JsonRespond<>(mQuotationService.list()));
-    }
-
 }

@@ -43,7 +43,7 @@ public class Notification {
         // unhandled quotation request, if request does not have quotation --> unhandled request
         if (!quotationRight) return null;
 
-        var requests = mRequestRepository.findByCustomerId(currentUser.getUuid()).stream()
+        var requests = mRequestRepository.findAll().stream()
                 .filter(s -> s.getQuotation() == null).toList();
 
         if (requests == null) return null;

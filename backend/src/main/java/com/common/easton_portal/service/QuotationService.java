@@ -50,11 +50,4 @@ public class QuotationService {
         mQuotationRepository.saveAndFlush(quotationEntity);
     }
 
-    @Retryable(value = {LockAcquisitionException.class }, maxAttemptsExpression = "${retry.maxAttempts}",
-            backoff = @Backoff(delayExpression = "${retry.maxDelay}"))
-    @Transactional(readOnly = true, isolation = Isolation.READ_COMMITTED)
-    public List<QuotationInfo.Base> list() {
-        var entities = mQuotationRepository.findAll();
-        return entities.stream().map(QuotationInfo.Base::new).toList();
-    }
 }

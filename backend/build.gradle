@@ -19,7 +19,7 @@ def withProject = { projectName ->
 }
 
 
-def achieveName = 'easton_portal'
+def achieveName = 'easton-portal'
 
 repositories {
     mavenCentral()

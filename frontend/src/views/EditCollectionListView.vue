@@ -54,7 +54,7 @@
 					/>
 				</div>
 				<div>
-					<q-btn class="row items-start" color="info" @click="importCollectionPictures(!createMode)">
+					<q-btn class="row items-start" color="info" @click="importCollectionPictures(false, null)">
 						<q-icon name="mdi-import" color="white" />
 						<q-tooltip>import file</q-tooltip>
 					</q-btn>
@@ -104,6 +104,9 @@
 									</q-btn>
 									<q-btn v-if="haveRights" class="action-btn" @click="removeAction(collection)">
 										<q-icon name="mdi-delete" />
+									</q-btn>
+									<q-btn v-if="haveRights" class="action-btn" @click="importCollectionPictures(!createMode, collection)">
+										<q-icon name="mdi-image" />
 									</q-btn>
 									<q-btn class="action-btn" @click="requestAction(collection)">
 										<q-icon name="mdi-file-document" />
@@ -254,10 +257,9 @@ export default defineComponent ({
 			if (data == null) return
 
 			try {
-				const accessToken = window.sessionStorage.getItem("accessToken")
-				await CollectionService.remove({ id: item.id }, accessToken, path.value.url);
-				items.value = await CollectionService.list(accessToken, path.value.url)
-
+				await CollectionService.remove({ id: item.id }, accessToken.value, path.value.url);
+				loadPageData(currentPage.value)
+				items.value = await CollectionService.list(accessToken.value, path.value.url)
 				PopupDialog.show(store, PopupDialog.SUCCESS, "Successfully removed collection");
 			} catch(err) {
 				PopupDialog.show(store, PopupDialog.FAILURE, err.message)
@@ -266,7 +268,6 @@ export default defineComponent ({
 
 		const editAction = async (item) => {
 			resetButtonHover()
-			
 			getListOfYears()
 			createMode.value = item == null
 			base64Profiles.value = null
@@ -279,7 +280,6 @@ export default defineComponent ({
 				successCheck : (data) => data.name != "" && data.year != null 
 			});
 			if (data == null) return;
-
 			try {
 				if (createMode.value) {
 					await CollectionService.create(
@@ -289,28 +289,32 @@ export default defineComponent ({
 							isProtected: data.isProtected,
 							image: base64Profiles.value
 						}
-						, window.sessionStorage.getItem("accessToken"), path.value.url)
+						, accessToken.value, path.value.url)
+					loadPageData(currentPage.value)
+					items.value = await CollectionService.list(accessToken.value, path.value.url)
 					PopupDialog.show(store, PopupDialog.SUCCESS, "Successfully created collection")
 				} else {
-					if (base64Profiles.value.length != 0) {	
-						let requestList = []
-						requestList = (base64Profiles.value.map(s => ({
-							id: item.id,
-							image: s,
-							format: "pgm"
-						})))
-						await Promise.all(requestList.map(s => 
-							CollectionService.update(s,window.sessionStorage.getItem("accessToken"), path.value.url)))
-					}
+					await CollectionService.update(
+						{
+							id: data.id,
+							name: data.name,
+							year: data.year,
+							isProtected: data.isProtected,
+							image: base64Profiles.value
+						}
+						, accessToken.value, path.value.url)
+					loadPageData(currentPage.value)
+					items.value = await CollectionService.list(accessToken.value, path.value.url)
 					PopupDialog.show(store, PopupDialog.SUCCESS, "Successfully edited collection")
 				}
-				items.value = await CollectionService.list(window.sessionStorage.getItem("accessToken"), path.value.url)
+				items.value = await CollectionService.list(accessToken.value, path.value.url)
 			} catch(err) {
 				PopupDialog.show(store, PopupDialog.FAILURE, err.message)
 			}
 		}
 
-		const importCollectionPictures = async (isMultiple) => {
+		const importCollectionPictures = async (isMultiple, item) => {
+			base64Profiles.value = null
 			collections.value = null
 			collections.value = await showFileDialog(".png", isMultiple)
 			if (collections.value == null || collections.value.length <= 0) return
@@ -319,10 +323,30 @@ export default defineComponent ({
 
 			urls = isMultiple ? await Promise.all(collections.value.map(async s => await fileToDataUrl(s))) :
 				await fileToDataUrl(collections.value)
-
 			if (urls == null || urls.length <= 0) return
 
 			base64Profiles.value = isMultiple ? urls.map(s => dataUrlToBase64String(s)) : dataUrlToBase64String(urls);
+			if (isMultiple && item != null) batchUpdateImages(item)
+		}
+
+		const batchUpdateImages = async (item) => {
+			try {
+				if (base64Profiles.value != null) {	
+					let requestList = []
+					requestList = (base64Profiles.value.map(s => ({
+						id: item.id,
+						image: s,
+						format: "pgm"
+					})))
+					await Promise.all(requestList.map(s => 
+						CollectionService.updateImages(s,accessToken.value, path.value.url)))
+				}
+				loadPageData(currentPage.value)
+				items.value = await CollectionService.list(accessToken.value, path.value.url)
+				PopupDialog.show(store, PopupDialog.SUCCESS, "Successfully added collection photos")
+			} catch(err) {
+				PopupDialog.show(store, PopupDialog.FAILURE, err.message)
+			}
 		}
 		
 		const requestAction = async (item) => {
@@ -407,7 +431,6 @@ export default defineComponent ({
 				path.value = await WebService.getInfo()
 
 				accessToken.value = await CollectionService.webAuthenticate(currentUser.value.uuid, currentUser.value.username, path.value.url)
-				window.sessionStorage.setItem("accessToken", accessToken.value)
 				loadPageData(currentPage.value)
 				items.value = await CollectionService.list(accessToken.value, path.value.url)
 			} catch(err) {
@@ -418,8 +441,8 @@ export default defineComponent ({
 		return { model, items, accessToken, imageCollections, path, columns, collections, base64Profiles,
 			selectedCollection, currentPage, itemsPerPage, totalPages, collectionList, totalProducts,
 			listOfYears, createMode, displayDialog, createDialog, removeDialog, requestDialog, 
-			visiblePages, startItem, endItem, haveRights, importCollectionPictures, removeAction, editAction, 
-			displayAction, requestAction, goToPage }
+			visiblePages, startItem, endItem, haveRights, batchUpdateImages, importCollectionPictures, 
+			removeAction, editAction, displayAction, requestAction, goToPage }
 	}
 })
 </script>
