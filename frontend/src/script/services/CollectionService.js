@@ -24,12 +24,24 @@ const webAuthenticate = async (id, username, webUrl) => {
 	return data.accessToken
 }
 
-const list = async (request, webUrl) => {
-	if (request == null) return
-	const response = await webPost(webUrl, "/collection/list", {}, request)
+const list = async (accessToken, webUrl) => {
+	const response = await webPost(webUrl, "/collection/list", {}, accessToken)
 	return response.data.data
 }
 
+const getImagesPage = async (webUrl, request, accessToken) => {
+	const response = await webPost(webUrl, "/collection/images-page-all", {
+		pageIndex: request.pageIndex,
+		itemsPerPage: request.itemsPerPage,
+	}
+	, accessToken)
+	return response.data.data
+}
+
+const findImageById = async (request, webUrl) => {
+	const response = await webPost(webUrl, "/image/public/image-by-id", request, null)
+	return response.data.data
+}
 
 const create = async (request, accessToken, webUrl) => {
 	if (request == null || accessToken == null) return
@@ -53,7 +65,7 @@ const remove = async(request, accessToken, webUrl) => {
 
 const update = async (request, accessToken, webUrl) => {
 	if (request == null || accessToken == null) return
-	const response = await webPost(webUrl, "/image/public/add",
+	const response = await webPost(webUrl, "/image/update",
 		{
 			id: request.id,
 			image: request.image,
@@ -63,10 +75,7 @@ const update = async (request, accessToken, webUrl) => {
 	return response.data.data
 }
 
-const findImageById = async (request, webUrl) => {
-	const response = await webPost(webUrl, "/image/public/image-by-id", request, null)
-	return response.data.data
-}
+
 
 export default {
 	webAuthenticate,
@@ -74,5 +83,6 @@ export default {
 	create,
 	update, 
 	remove,
-	findImageById
+	findImageById,
+	getImagesPage
 }

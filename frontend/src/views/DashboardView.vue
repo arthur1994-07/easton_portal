@@ -1,6 +1,5 @@
 <template>
 	<q-page>
-		<div class="text-section-color text-h3 text-center">Dashboard</div>
 		<q-separator class="q-my-sm" dark />
 		<grid-layout
 			v-model:layout="layout"
@@ -43,23 +42,25 @@ import { getDashWidgets } from "../script/core/addin/AddinSystem.js";
 import * as PopupDialog from '../script/utils/PopupDialog.js'
 import * as SettingAttribute from '../script/enums/SettingAttribute.js'
 import WrapAddinView from "./addin/WrapAddinView.vue";
+import * as PermissionType from '../script/enums/PermissionType.js'
+import CurrentUserService from "../script/services/CurrentUserService.js";
 
 
 
 const saveDashboardKey = 'dashboard-layout'
 
 const defaultLayoutLarge = [
-	{ x:1, y :0,  w:10, h:10,  i :"notifications",},
-	{ x:6, y :10, w:5,  h:10,  i :"announcement",},
-	{ x:1, y :12, w:5,  h:12,  i :"total-customers",},
-	{ x:1, y: 20, w:5,  h:12,  i : "active-quotation-requests",}
+	{ x:1, y :0,  w:10, h:10,  i :"notifications", auth: null },
+	{ x:1, y :10, w:10,  h:10,  i :"announcement", auth: null },
+	{ x:6, y :12, w:5,  h:12,  i :"total-customers", auth: PermissionType.USER },
+	{ x:1, y: 12, w:5,  h:12,  i : "active-quotation-requests", auth: PermissionType.USER }
 ]
 
 const defaultLayoutSmall = [
-	{ x:1, y :0,  w:10, h:10,  i :"notifications",},
-	{ x:1, y :10, w:10,  h:10,  i :"announcement",},
-	{ x:1, y :12, w:10,  h:12,  i :"total-customers",},
-	{ x:1, y: 20, w:10,  h:12,  i : "active-quotation-requests",}
+	{ x:1, y :0,  w:10, h:10,  i :"notifications", auth: null },
+	{ x:1, y :10, w:10,  h:10,  i :"announcement", auth: null },
+	{ x:1, y :12, w:10,  h:12,  i :"total-customers", auth: PermissionType.USER },
+	{ x:1, y: 20, w:10,  h:12,  i : "active-quotation-requests", auth: PermissionType.USER }
 ]
 
 
@@ -84,6 +85,7 @@ export default defineComponent ({
 		const activeSite = ref(null)
 		const gridMargin = readonly(ref([5, 5]))
 		const rowHeight = readonly(ref(20))
+		const userRight = ref(false)
 		const calcMinHeight = (value) => value == null ? 1 : 
 			Math.ceil((value + gridMargin.value[1]) / (rowHeight.value + gridMargin.value[1])) >> 0 
 		const calcMaxHeight = (value) => value == null ? Infinity : 
@@ -95,24 +97,28 @@ export default defineComponent ({
 				creator: shallowRef(defineAsyncComponent(() => import('../views/dash/NotificationWidget.vue'))),
 				minHeight: 150,
 				maxHeight: 280,
+				auth: null,
 			},
 			{
 				key: "announcement",
 				creator: shallowRef(defineAsyncComponent(() => import('./dash/NewsAnnouncementWidget.vue'))),
 				minHeight: 150,
 				maxHeight: 4,
+				auth: null,
 			},
 			{
 				key: "total-customers",
 				creator: shallowRef(defineAsyncComponent(() => import('../views/dash/CustomerNumberWidget.vue'))),
 				minHeight: 150,
 				maxHeight: 4,
+				auth: PermissionType.USER
 			},
 			{
 				key: "active-quotation-requests",
 				creator: shallowRef(defineAsyncComponent(() => import('../views/dash/ActiveQuotationsWidget.vue'))),
 				minHeight: 150,
 				maxHeight: 4,
+				auth: PermissionType.USER
 			},
 		])
 
@@ -172,17 +178,28 @@ export default defineComponent ({
 		
 		const currentLayout = computed(() => safeLayoutCheck(getLocalLayout(layoutType.value) ?? defaultLayout.value))
 		const layout = ref(applyWidget(currentLayout.value.map(s => ({...s}))))
-		watch(layoutType, () => layout.value = applyWidget(currentLayout.value.map(s => ({...s}))))
+
+		watch(layoutType, () => {
+			if (!userRight.value) {
+				const list = currentLayout.value.filter(s => s.auth == null)
+				layout.value = applyWidget(list.map(s => ({...s})));
+			} else {
+				layout.value = applyWidget(currentLayout.value.map(s => ({...s}))) 
+			}
+		})
 		
 		const serverDatabaseKey = (s) => SettingAttribute.PREFIX_DASHBOARD_LAYOUT + "_" + layoutTypeName[s]
 		const filterServerLayout = (data) => {
 			return [...Array(layoutTypeName.length).keys()].map(s => data.find(t => t.key == serverDatabaseKey(s))?.value)
 		}
 		
-
-		onMounted(() => {
+		onMounted(async () => {
 			try {
 				// serverLayout.value = filterServerLayout(serverLayoutData)
+				const rights = await CurrentUserService.permission()
+				userRight.value = rights.includes(PermissionType.USER)
+				if (!userRight.value) 
+					layout.value = layout.value.filter(s => s.widget.auth == null)
 			} catch(err) {
 				PopupDialog.show(store, PopupDialog.FAILURE, err.message)
 			}

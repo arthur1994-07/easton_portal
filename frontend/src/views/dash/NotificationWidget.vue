@@ -1,6 +1,6 @@
 <template>
 	<q-card style="height: 100%">
-		<div class="text-h4">Notifications</div>
+		<div class="text-h5">Notifications</div>
 		<div class="justify-between row q-pa-sm">
 			<div class="text-left">
 				<div v-if="requestNot != ''" class="justify-between row">	
