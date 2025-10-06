@@ -134,7 +134,6 @@ export default defineComponent ({
 		onMounted(async () => {
 			try {
 				const current = await CurrentUserService.current();
-				console.log(current)
 				const domainId = await UserService.getDomain({id: current.uuid});
 				unsortedUsers.value = await UserService.list({ domainId : domainId.value })
 				selectedUser.value = null

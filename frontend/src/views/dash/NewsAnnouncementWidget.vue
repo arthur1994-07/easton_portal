@@ -1,6 +1,6 @@
 <template>
 	<q-card style="height: 100%">
-		<div>News Page</div>
+		<div class="text-h5">Latest News</div>
 	</q-card>
 </template>
 

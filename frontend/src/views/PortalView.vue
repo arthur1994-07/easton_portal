@@ -21,9 +21,9 @@
 				<q-item-section avatar>
 					<q-icon color="white" :name="mini ? 'mdi-chevron-double-right' : 'mdi-chevron-double-left'" />
 				</q-item-section>
-				<q-item-section>
+				<!-- <q-item-section>
 					<q-item-label class="text-white">Collapse Sidebar</q-item-label>
-				</q-item-section>
+				</q-item-section> -->
 			</q-item>
 			<q-separator dark />
 			<q-list v-if="currentUser != null && !mini" class="q-ma-lg">
