@@ -11,7 +11,7 @@
 								<q-img :src="companyLogo" class="icon q-ma-lg justify-center items-center" fit="contain" 
 									style="max-height: 15vh;"
 								/>
-								<div class="col-1 q-ma-sm text-h6 text-white">Login portal</div>
+								<div class="col-1 q-ma-sm text-h6 text-white">Login</div>
 							</div>
 						</q-card-section>
 						<q-separator dark />

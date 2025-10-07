@@ -281,8 +281,8 @@ export default defineComponent({
 .swiper-button-next,
 .swiper-button-prev {
 	background: rgba(255, 255, 255, 0.2);
-	width: 60px;
-	height: 60px;
+	width: 40px;
+	height: 40px;
 	border-radius: 50%;
 	backdrop-filter: blur(10px);
 	transition: all 0.3s ease;
@@ -343,8 +343,8 @@ export default defineComponent({
 	
 	.swiper-button-next,
 	.swiper-button-prev {
-		width: 50px;
-		height: 50px;
+		width: 30px;
+		height: 30px;
 	}
 	
 	:deep(.swiper-button-next::after),

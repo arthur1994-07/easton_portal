@@ -24,13 +24,18 @@ const webAuthenticate = async (id, username, webUrl) => {
 	return data.accessToken
 }
 
-const list = async (accessToken, webUrl) => {
-	const response = await webPost(webUrl, "/collection/list", {}, accessToken)
+const getImagesPage = async (webUrl, request, accessToken) => {
+	const response = await webPost(webUrl, "/collection/images-page-all", {
+		pageIndex: request.pageIndex,
+		itemsPerPage: request.itemsPerPage,
+	}
+	, accessToken)
 	return response.data.data
 }
 
-const getImagesPage = async (webUrl, request, accessToken) => {
-	const response = await webPost(webUrl, "/collection/images-page-all", {
+const getImagesPageProtect = async (webUrl, request, accessToken) => {
+	const response = await webPost(webUrl, "/collection/images-page-protected", {
+		isProtected: true,
 		pageIndex: request.pageIndex,
 		itemsPerPage: request.itemsPerPage,
 	}
@@ -92,11 +97,11 @@ const update = async (request, accessToken, webUrl) => {
 
 export default {
 	webAuthenticate,
-	list,
 	create,
 	updateImages, 
 	update,
 	remove,
 	findImageById,
-	getImagesPage
+	getImagesPage,
+	getImagesPageProtect
 }

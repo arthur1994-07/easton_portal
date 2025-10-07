@@ -55,7 +55,7 @@ export default defineComponent ({
 }
 
 .text-section-color {
-	color : #B9BFF4; 
+	color : #171927; 
 }
 
 .bg-section-color {

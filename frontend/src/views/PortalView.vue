@@ -21,9 +21,6 @@
 				<q-item-section avatar>
 					<q-icon color="white" :name="mini ? 'mdi-chevron-double-right' : 'mdi-chevron-double-left'" />
 				</q-item-section>
-				<!-- <q-item-section>
-					<q-item-label class="text-white">Collapse Sidebar</q-item-label>
-				</q-item-section> -->
 			</q-item>
 			<q-separator dark />
 			<q-list v-if="currentUser != null && !mini" class="q-ma-lg">
@@ -39,6 +36,13 @@
 					Email:
 					{{ currentUser.email }}
 				</q-item>
+				<!-- <q-item class="justify-center">
+					<q-btn class="item-center" color="blue-6" @click="signOut">
+						<q-icon class="q-mx-xs" name="mdi-logout-variant">
+							<q-tooltip>logout</q-tooltip>
+						</q-icon>
+					</q-btn>
+				</q-item> -->
 			</q-list>
 			<q-separator dark />
 			<q-list>
@@ -90,14 +94,21 @@
 				</div>
 			</q-list>
 			<q-separator dark />
-			<q-item clickable @click="signOut">
+			<q-item class="justify-center q-ma-md">
+				<q-btn class="item-center" color="blue-6" @click="signOut">
+					<q-icon class="q-mx-xs" name="mdi-logout-variant">
+						<q-tooltip>logout</q-tooltip>
+					</q-icon>
+				</q-btn>
+			</q-item>
+			<!-- <q-item clickable @click="signOut">
 				<q-item-section avatar>
 					<q-icon color="white" name="mdi-logout" />
 				</q-item-section>
 				<q-item-section>
 					<q-item-label class="text-white">Log Out</q-item-label>
 				</q-item-section>
-			</q-item>
+			</q-item> -->
 		</q-drawer>
 		<q-page-container>
 			<router-view />
