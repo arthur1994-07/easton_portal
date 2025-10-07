@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
@@ -33,6 +34,12 @@ public class EmailNotification {
         return sendEmail(to, subject, body, true);
     }
 
+    // Async email sending
+    @Async
+    public boolean sendEmailAsync(String to, String subject, String body, boolean isHtml) {
+        return sendEmail(to, subject, body, isHtml);
+    }
+
     // send email
     public boolean sendEmail(String to, String subject, String body, boolean isHtml) {
         if (to == null) return false;
@@ -47,6 +54,16 @@ public class EmailNotification {
         }
     }
 
+    @Async
+    public boolean sendEmailNotificationAsync(String to, String currentTime, String email,
+                                              String name, String recipientName, EmailType type) throws Exception {
+        try {
+            return sendEmailNotification(to, currentTime, email, name, recipientName, type);
+        } catch (Exception ex) {
+            Log.e("Failed to send email to {}", to, ex);
+            return false;
+        }
+    }
 
     public boolean sendEmailNotification(String to, String currentTime, String email,
                                          String name, String recipientName, EmailType type) throws Exception {

@@ -30,7 +30,7 @@ public class RequestService {
     @Retryable(value = {LockAcquisitionException.class }, maxAttemptsExpression = "${retry.maxAttempts}",
             backoff = @Backoff(delayExpression = "${retry.maxDelay}"))
     @Transactional(isolation = Isolation.SERIALIZABLE)
-    public synchronized void create(long customerId, String customerName, String customerEmail, String collectionName, String remarks) throws Exception {
+    public void create(long customerId, String customerName, String customerEmail, String collectionName, String remarks) throws Exception {
         if (customerId < 0) throw new Exception("Invalid user ID");
         if (StringHelper.isNullOrEmpty(customerEmail) ||
             StringHelper.isNullOrEmpty(collectionName))
@@ -46,7 +46,7 @@ public class RequestService {
 
         mRequestRepository.saveAndFlush(entity);
 
-        mEmail.sendEmailNotification(mMailTo, new SimpleDateFormat("yyyy-MM-dd").format(new Date()),
+        mEmail.sendEmailNotificationAsync(mMailTo, new SimpleDateFormat("yyyy-MM-dd").format(new Date()),
                 customerEmail, customerName, null, EmailType.request);
     }
 
