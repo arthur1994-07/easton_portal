@@ -83,7 +83,7 @@
 	<q-page class="q-pa-sm">
 		<q-card class="bg-secondary">
 			<q-card-section class="row justify-between">
-				<div class="text-section-color text-h6">Collection List</div>
+				<div class="text-section-color text-h6">{{ haveRights ? "Collection List" : "New Collections" }}</div>
 				<div>
 					<q-btn v-if="haveRights" push class="q-mx-xs" color="white" @click="editAction(null)">
 						<q-icon color="primary" name="mdi-plus" />
@@ -259,7 +259,6 @@ export default defineComponent ({
 			try {
 				await CollectionService.remove({ id: item.id }, accessToken.value, path.value.url);
 				loadPageData(currentPage.value)
-				items.value = await CollectionService.list(accessToken.value, path.value.url)
 				PopupDialog.show(store, PopupDialog.SUCCESS, "Successfully removed collection");
 			} catch(err) {
 				PopupDialog.show(store, PopupDialog.FAILURE, err.message)
@@ -291,7 +290,6 @@ export default defineComponent ({
 						}
 						, accessToken.value, path.value.url)
 					loadPageData(currentPage.value)
-					items.value = await CollectionService.list(accessToken.value, path.value.url)
 					PopupDialog.show(store, PopupDialog.SUCCESS, "Successfully created collection")
 				} else {
 					await CollectionService.update(
@@ -304,10 +302,8 @@ export default defineComponent ({
 						}
 						, accessToken.value, path.value.url)
 					loadPageData(currentPage.value)
-					items.value = await CollectionService.list(accessToken.value, path.value.url)
 					PopupDialog.show(store, PopupDialog.SUCCESS, "Successfully edited collection")
 				}
-				items.value = await CollectionService.list(accessToken.value, path.value.url)
 			} catch(err) {
 				PopupDialog.show(store, PopupDialog.FAILURE, err.message)
 			}
@@ -342,7 +338,6 @@ export default defineComponent ({
 						CollectionService.updateImages(s,accessToken.value, path.value.url)))
 				}
 				loadPageData(currentPage.value)
-				items.value = await CollectionService.list(accessToken.value, path.value.url)
 				PopupDialog.show(store, PopupDialog.SUCCESS, "Successfully added collection photos")
 			} catch(err) {
 				PopupDialog.show(store, PopupDialog.FAILURE, err.message)
@@ -402,10 +397,14 @@ export default defineComponent ({
 		const loadPageData = async (currentPage) => {
 			try {
 
-				const collectionsData = await CollectionService.getImagesPage(path.value.url, {
+				const collectionsData = haveRights.value ? await CollectionService.getImagesPage(path.value.url, {
 					pageIndex: currentPage -1, 
 					itemsPerPage: itemsPerPage.value
-				}, accessToken.value)
+				}, accessToken.value) : 
+					await CollectionService.getImagesPageProtect(path.value.url, {
+						pageIndex: currentPage -1, 
+						itemsPerPage: itemsPerPage.value
+					}, accessToken.value)
 				totalProducts.value = collectionsData.totalItems
 				
 				collectionList.value = await collectionsData.items.map(s => ({
@@ -432,7 +431,6 @@ export default defineComponent ({
 
 				accessToken.value = await CollectionService.webAuthenticate(currentUser.value.uuid, currentUser.value.username, path.value.url)
 				loadPageData(currentPage.value)
-				items.value = await CollectionService.list(accessToken.value, path.value.url)
 			} catch(err) {
 				PopupDialog.show(store, PopupDialog.FAILURE, err.message)
 			}

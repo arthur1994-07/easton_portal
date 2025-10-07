@@ -44,7 +44,7 @@ public class QuotationService {
                 .build();
         requestEntity.setQuotation(quotationEntity);
 
-        mEmail.sendEmailNotification(requestEntity.getCustomerEmail(), new SimpleDateFormat("yyyy-MM-dd").format(new Date()),
+        mEmail.sendEmailNotificationAsync(requestEntity.getCustomerEmail(), new SimpleDateFormat("yyyy-MM-dd").format(new Date()),
                 assigneeEmail, assigneeName, requestEntity.getCustomerName(), EmailType.reply);
         
         mQuotationRepository.saveAndFlush(quotationEntity);

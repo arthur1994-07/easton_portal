@@ -8,7 +8,7 @@
 			</q-card-section>
 		</template>
 	</two-button-dialog>
-	<two-button-dialog ref="editDialog" :title="editTitle" cardStyle="max-width: 50vw; width : 50vw">
+	<two-button-dialog ref="editDialog" :title="editTitle" cardStyle="max-width: 50vw; width : 50vw" successText="Create">
 		<template v-slot="{data}">
 			<q-card-section>
 				<div class="items-center q-my-sm">

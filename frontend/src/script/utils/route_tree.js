@@ -54,7 +54,7 @@ const createDashboardView = () => ({
 	component: () => import('../../views/DashboardView.vue'),
 	meta: {
 		icon: 'mdi-tablet-dashboard',
-		title: "Dashboard",
+		title: "Home Page",
 		order: 0,
 	}
 })
