@@ -27,6 +27,9 @@ public class RequestService {
     @Value("${app.email.sales}")
     private String mMailTo;
 
+    @Value("${spring.mail.enable}")
+    private boolean mEnable;
+
     @Retryable(value = {LockAcquisitionException.class }, maxAttemptsExpression = "${retry.maxAttempts}",
             backoff = @Backoff(delayExpression = "${retry.maxDelay}"))
     @Transactional(isolation = Isolation.SERIALIZABLE)
@@ -47,7 +50,7 @@ public class RequestService {
         mRequestRepository.saveAndFlush(entity);
 
         mEmail.sendEmailNotificationAsync(mMailTo, new SimpleDateFormat("yyyy-MM-dd").format(new Date()),
-                customerEmail, customerName, null, EmailType.request);
+                customerEmail, customerName, null, collectionName, remarks, EmailType.request);
     }
 
     @Retryable(value = {LockAcquisitionException.class }, maxAttemptsExpression = "${retry.maxAttempts}",
