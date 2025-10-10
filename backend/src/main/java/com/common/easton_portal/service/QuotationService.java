@@ -1,7 +1,6 @@
 package com.common.easton_portal.service;
 
 import com.common.core.web.utility.LobHelper;
-import com.common.easton_portal.data.QuotationInfo;
 import com.common.easton_portal.entity.QuotationEntity;
 import com.common.easton_portal.enumerate.EmailType;
 import com.common.easton_portal.misc.EmailNotification;
@@ -19,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.text.SimpleDateFormat;
 import java.util.Base64;
 import java.util.Date;
-import java.util.List;
 
 @Service
 public class QuotationService {
@@ -28,8 +26,8 @@ public class QuotationService {
     @Autowired private RequestRepository mRequestRepository;
     @Autowired private EmailNotification mEmail;
 
-    @Value("${app.email.from}")
-    private String mMailTo;
+    @Value("${spring.mail.enable}")
+    private boolean mEnable;
 
     @Retryable(value = {LockAcquisitionException.class }, maxAttemptsExpression = "${retry.maxAttempts}",
             backoff = @Backoff(delayExpression = "${retry.maxDelay}"))
@@ -44,9 +42,11 @@ public class QuotationService {
                 .build();
         requestEntity.setQuotation(quotationEntity);
 
-        mEmail.sendEmailNotificationAsync(requestEntity.getCustomerEmail(), new SimpleDateFormat("yyyy-MM-dd").format(new Date()),
-                assigneeEmail, assigneeName, requestEntity.getCustomerName(), EmailType.reply);
-        
+        if (mEnable) {
+            mEmail.sendEmailNotificationAsync(requestEntity.getCustomerEmail(), new SimpleDateFormat("yyyy-MM-dd").format(new Date()),
+                    assigneeEmail, assigneeName, requestEntity.getCustomerName(), requestEntity.getCollectionName(), null, EmailType.reply);
+        }
+
         mQuotationRepository.saveAndFlush(quotationEntity);
     }
 

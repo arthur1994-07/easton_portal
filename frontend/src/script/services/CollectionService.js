@@ -34,7 +34,7 @@ const getImagesPage = async (webUrl, request, accessToken) => {
 }
 
 const getImagesPageProtect = async (webUrl, request, accessToken) => {
-	const response = await webPost(webUrl, "/collection/images-page-protected", {
+	const response = await webPost(webUrl, "/collection/images-page-portal", {
 		isProtected: true,
 		pageIndex: request.pageIndex,
 		itemsPerPage: request.itemsPerPage,
