@@ -71,7 +71,7 @@
 			<q-card-section>
 				<div class="items-center q-my-sm">
 					<q-input v-model="data.remarks" bg-color="grey-3" :dark="false" filled
-						label-color="primary" label="remarks"
+						label-color="primary" label="Additional Request"
 						:rules="[
 							val => !!val || 'Field is required',
 						]"
